@@ -20,7 +20,32 @@ function popArray() {
 
 popArray()
 
-runPrompt()
+if (data.length !== 0) {
+    runPrompt()
+} else {
+    runCompile()
+}
+
+function runCompile() {
+    inquirer
+      .prompt({
+        name: "action",
+        type: "list",
+        message: "What do you want to do?",
+        choices: [
+          "Compile and Convert to JSON",
+        ]
+      })
+      .then(function(answer) {
+        switch (answer.action) {
+        case "Compile and Convert to JSON":
+            convertJson();
+            break;
+        }
+      });
+  }
+
+
 
 function runPrompt() {
     inquirer
@@ -29,7 +54,7 @@ function runPrompt() {
         type: "list",
         message: "What do you want to do?",
         choices: [
-          "Compile and Convert to JSON",
+          "Recompile",
           "Update Fill SKU And Compile to CSV",
           "Update Weight And Compile to CSV",
           "Update Category And Compile to CSV",
@@ -41,7 +66,7 @@ function runPrompt() {
       })
       .then(function(answer) {
         switch (answer.action) {
-        case "Compile and Convert to JSON":
+        case "Recompile":
             convertJson();
             break;
         case "Update Fill SKU And Compile to CSV":
@@ -245,7 +270,6 @@ function convertJson() {
         let data = JSON.stringify(jsonObj);
         fs.writeFileSync('experimental.json', data);
         console.log("##### Successfully compiled and converted #####")
-        runPrompt()
     })
         .catch(err => {
             console.log(err);

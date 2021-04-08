@@ -9,8 +9,34 @@ const CSVToJSON = require('csvtojson');
 
 
 
+console.log(test.length)
 
-runPrompt()
+
+if (test.length !== 0) {
+  runPrompt()
+} else {
+  runCompile()
+}
+
+
+function runCompile() {
+  inquirer
+    .prompt({
+      name: "action",
+      type: "list",
+      message: "What do you want to do?",
+      choices: [
+        "Compile and Convert to JSON",
+      ]
+    })
+    .then(function(answer) {
+      switch (answer.action) {
+      case "Compile and Convert to JSON":
+          convertJson();
+          break;
+      }
+    });
+}
 
 function runPrompt() {
     inquirer
@@ -19,14 +45,14 @@ function runPrompt() {
         type: "list",
         message: "What do you want to do?",
         choices: [
-          "Compile and Convert to JSON",
+          "Recompile",
           "Update And Compile to CSV"
        
         ]
       })
       .then(function(answer) {
         switch (answer.action) {
-        case "Compile and Convert to JSON":
+        case "Recompile":
           convertJson();
           break;
         case "Update And Compile to CSV":
@@ -88,9 +114,9 @@ function convertJson() {
     CSVToJSON().fromFile('pacas.csv')
     .then((jsonObj)=>{
         let data = JSON.stringify(jsonObj);
-        fs.writeFileSync('updatedjson2.json', data);
+        fs.writeFileSync('updatedjson.json', data);
         console.log("##### Successfully compiled and converted #####")
-        runPrompt()
+     
     })
         .catch(err => {
             // log error if any
